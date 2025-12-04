@@ -23,31 +23,18 @@ body {
     place-items: center;
 }
 
-#question {
-    font-size: 18px;
-    margin-bottom: 15px;
-    font-weight: bold;
-}
 
-input[type="text"] {
-    width: 92%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
-button {
-    padding: 10px 15px;
-    font-size: 16px;
+.startButton {
     background-color: #007bff;
-    color: white;
-    border: none;
+    padding: 12px 25px;
     border-radius: 8px;
+    color: white;
+    font-size: 18px;
+    text-decoration: none;
     cursor: pointer;
+    display: inline-block;
 }
 
-button:hover {
+.startButton:hover {
     background-color: #0056b3;
 }
