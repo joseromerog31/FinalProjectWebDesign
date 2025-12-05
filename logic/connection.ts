@@ -132,7 +132,7 @@ function checkAnswers(): void {
     setTimeout(() => {
         if (questionCount === 10) {
             const queryString = `?correctCount=${correctCount}&incorrectCount=${incorrectCount}`;
-            window.location.href = `quiz-results.html${queryString}`;
+            window.location.href = `results.html${queryString}`;
         } else {
             questionCount++;
             void loadQuestion();

@@ -35,12 +35,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 // DOM elements
-// Question + meta info
+// Question
 var questionEl = document.querySelector('#question'); // DOM Question
 var optionsEl = document.querySelector('.quiz-options'); // Optional: to show multiple-choice options as text
 var categoryEl = document.querySelector('#quizCategory'); // DOM Category
 var difficultyEl = document.querySelector('#quizDifficulty'); // DOM Difficulty
-// New: user answer input (text box)
 var answerInput = document.querySelector('#answer');
 var btnCheck = document.getElementById('btnCheck');
 var infoMessageEl = document.querySelector('.info-message');
@@ -81,11 +80,11 @@ function showQuestion(data) {
     var randomOptions = [];
     randomOptions.push.apply(randomOptions, incorrectAnswers);
     randomOptions.push(correctAnswer);
-    // Randomize options (optional – only if you still want to display them)
+    // Randomize options
     randomOptions.sort(function () { return Math.random() - 0.5; });
     if (!questionEl || !categoryEl || !difficultyEl)
         return;
-    // Use innerHTML because the API sends encoded entities (&quot;)
+    // Use innerHTML
     questionEl.innerHTML = data.question;
     categoryEl.textContent = data.category;
     setDifficulty(data.difficulty);
@@ -93,7 +92,7 @@ function showQuestion(data) {
     if (answerInput) {
         answerInput.value = '';
     }
-    // If you still want to display options as hints (non-clickable)
+    // Display options as hints
     if (optionsEl) {
         optionsEl.innerHTML = '';
         for (var _i = 0, randomOptions_1 = randomOptions; _i < randomOptions_1.length; _i++) {
@@ -119,7 +118,7 @@ function setDifficulty(quizDifficulty) {
     }
     difficultyEl.textContent = quizDifficulty;
 }
-// ---------- Answer Check (using text box) ----------
+// Answer Check
 function checkAnswers() {
     if (!answerInput)
         return;
@@ -139,7 +138,6 @@ function checkAnswers() {
     var correctNormalized = correctAnswer.trim().toLowerCase();
     if (userAnswer === correctNormalized) {
         correctCount++;
-        // You can later add a "correct!" message in the HTML
         console.log('Correct!');
     }
     else {
@@ -150,7 +148,7 @@ function checkAnswers() {
     setTimeout(function () {
         if (questionCount === 10) {
             var queryString = "?correctCount=".concat(correctCount, "&incorrectCount=").concat(incorrectCount);
-            window.location.href = "quiz-results.html".concat(queryString);
+            window.location.href = "results.html".concat(queryString);
         }
         else {
             questionCount++;
