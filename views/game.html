@@ -3,23 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="../styles/indexStyle.css">
+    <link rel="stylesheet" href="../styles/gameStyle.css">
     <link rel="stylesheet" href="../styles/headerStyle.css">
 
 </head>
-<body>
-
 <div class="header">
     <h1>Trivia Challenge</h1>
 </div>
 
 <div class="mainContent">
     <div class="container">
+
+        <!-- Top info: category, difficulty, question number -->
+        <div class="quiz-header">
+            <p id="quizCategory">Category</p>
+            <p>
+                Difficulty:
+                <span id="quizDifficulty">-</span>
+            </p>
+            <p>
+                Question
+                <span id="totalQuestions">1</span>
+                / 10
+            </p>
+        </div>
+
+        <!-- Question text -->
         <div id="question">Loading question...</div>
+
+        <!-- Optional: show multiple-choice options as hints (not clickable) -->
+        <ul class="quiz-options">
+            <!-- TS will fill this with <li> options -->
+        </ul>
+
+        <!-- User answer input -->
         <input type="text" id="answer" placeholder="Type your answer here">
-        <button id="submitBtn">Submit Answer</button>
+
+        <!-- Button that TS listens to as #btnCheck -->
+        <button id="btnCheck">Submit Answer</button>
+
+        <!-- Info message when user submits without typing -->
+        <div class="info-message hidden">
+            Please type an answer before submitting.
+        </div>
+
     </div>
 </div>
 
+<script type="module" src="../logic/connection.js"></script>
 </body>
 </html>
