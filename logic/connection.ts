@@ -14,21 +14,19 @@ interface TriviaApiResponse {
 
 // DOM elements
 
-// Question + meta info
+// Question
 const questionEl = document.querySelector<HTMLElement>('#question');      // DOM Question
 const optionsEl = document.querySelector<HTMLUListElement>('.quiz-options'); // Optional: to show multiple-choice options as text
 const categoryEl = document.querySelector<HTMLElement>('#quizCategory');  // DOM Category
 const difficultyEl = document.querySelector<HTMLElement>('#quizDifficulty'); // DOM Difficulty
-
-// New: user answer input (text box)
 const answerInput = document.querySelector<HTMLInputElement>('#answer');
+
 
 const btnCheck = document.getElementById('btnCheck') as HTMLButtonElement | null;
 const infoMessageEl = document.querySelector<HTMLElement>('.info-message');
 const totalQuestionsElement = document.getElementById('totalQuestions');
 
 // Game State
-
 let correctAnswer: string = '';
 let incorrectAnswers: string[] = [];
 let questionCount = 1;
@@ -36,7 +34,6 @@ let correctCount = 0;
 let incorrectCount = 0;
 
 // API Logic
-
 async function loadQuestion (): Promise<void> {
     const APIUrl = 'https://opentdb.com/api.php?amount=1&type=multiple';
 
@@ -59,12 +56,12 @@ function showQuestion(data: TriviaQuestionRaw): void {
     randomOptions.push(...incorrectAnswers);
     randomOptions.push(correctAnswer);
 
-    // Randomize options (optional – only if you still want to display them)
+    // Randomize options
     randomOptions.sort(() => Math.random() - 0.5);
 
     if (!questionEl || !categoryEl || !difficultyEl) return;
 
-    // Use innerHTML because the API sends encoded entities (&quot;)
+    // Use innerHTML
     questionEl.innerHTML = data.question;
     categoryEl.textContent = data.category;
 
@@ -75,7 +72,7 @@ function showQuestion(data: TriviaQuestionRaw): void {
         answerInput.value = '';
     }
 
-    // If you still want to display options as hints (non-clickable)
+    // Display options as hints
     if (optionsEl) {
         optionsEl.innerHTML = '';
         for (const option of randomOptions) {
@@ -102,8 +99,7 @@ function setDifficulty(quizDifficulty: TriviaQuestionRaw['difficulty']): void {
     difficultyEl.textContent = quizDifficulty;
 }
 
-// ---------- Answer Check (using text box) ----------
-
+// Answer Check
 function checkAnswers(): void {
     if (!answerInput) return;
 
@@ -126,7 +122,6 @@ function checkAnswers(): void {
 
     if (userAnswer === correctNormalized) {
         correctCount++;
-        // You can later add a "correct!" message in the HTML
         console.log('Correct!');
     } else {
         incorrectCount++;
