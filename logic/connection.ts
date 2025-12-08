@@ -26,6 +26,10 @@ const btnCheck = document.getElementById('btnCheck') as HTMLButtonElement | null
 const infoMessageEl = document.querySelector<HTMLElement>('.info-message');
 const totalQuestionsElement = document.getElementById('totalQuestions');
 
+const feedbackContainer = document.querySelector<HTMLElement>('#feedback');
+const feedbackImage = document.querySelector<HTMLImageElement>('#feedbackImage');
+const feedbackText = document.querySelector<HTMLElement>('#feedbackText');
+
 // Game State
 let correctAnswer: string = '';
 let incorrectAnswers: string[] = [];
@@ -33,9 +37,27 @@ let questionCount = 1;
 let correctCount = 0;
 let incorrectCount = 0;
 
+function getCategoryIdFromUrl(): string | null {
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get('trivia_category');
+
+    if (!value || value === 'any') {
+        return null; // no category filter
+    }
+
+    return value;
+}
+
+const selectedCategoryId: string | null = getCategoryIdFromUrl();
+
+
 // API Logic
 async function loadQuestion (): Promise<void> {
-    const APIUrl = 'https://opentdb.com/api.php?amount=1&type=multiple';
+    let APIUrl = 'https://opentdb.com/api.php?amount=1&type=multiple';
+
+    if (selectedCategoryId) {
+        APIUrl += `&category=${selectedCategoryId}`;
+    }
 
     const response = await fetch(APIUrl);
     if (!response.ok) {
@@ -43,6 +65,13 @@ async function loadQuestion (): Promise<void> {
     }
 
     const data: TriviaApiResponse = await response.json();
+
+    if (data.results.length === 0) {
+        console.error('No questions returned for this category id:', selectedCategoryId);
+        // Here you could show a message in the DOM if you want
+        return;
+    }
+
     const firstQuestion = data.results[0];
 
     showQuestion(firstQuestion);
@@ -99,6 +128,22 @@ function setDifficulty(quizDifficulty: TriviaQuestionRaw['difficulty']): void {
     difficultyEl.textContent = quizDifficulty;
 }
 
+// Feedback
+function showFeedback(isCorrect: boolean): void {
+    if (!feedbackContainer || !feedbackImage || !feedbackText) return;
+
+    feedbackContainer.classList.remove('hidden');
+
+    if (isCorrect) {
+        feedbackImage.src = '../assets/correct.jpg';
+        feedbackText.textContent = 'Correct! 🎉';
+    } else {
+        feedbackImage.src = '../assets/incorrect.jpg';
+        feedbackImage.alt = 'Incorrect answer';
+        feedbackText.textContent = `Incorrect! The correct answer was: ${correctAnswer}`;
+    }
+}
+
 // Answer Check
 function checkAnswers(): void {
     if (!answerInput) return;
@@ -119,17 +164,22 @@ function checkAnswers(): void {
     // Normalize both answers to ignore case and extra whitespace
     const userAnswer = userAnswerRaw.toLowerCase();
     const correctNormalized = correctAnswer.trim().toLowerCase();
+    const isCorrect = userAnswer === correctNormalized;
 
-    if (userAnswer === correctNormalized) {
+    if (isCorrect) {
         correctCount++;
-        console.log('Correct!');
     } else {
         incorrectCount++;
-        console.log(`Incorrect. Correct answer: ${correctAnswer}`);
     }
 
-    // Prepare for next question
+    showFeedback(isCorrect);
+
     setTimeout(() => {
+        // hide feedback
+        if (feedbackContainer) {
+            feedbackContainer.classList.add('hidden');
+        }
+
         if (questionCount === 10) {
             const queryString = `?correctCount=${correctCount}&incorrectCount=${incorrectCount}`;
             window.location.href = `results.html${queryString}`;
@@ -141,7 +191,10 @@ function checkAnswers(): void {
         if (totalQuestionsElement) {
             totalQuestionsElement.textContent = String(questionCount);
         }
-    }, 800); // small delay so we can later show a "Correct/Incorrect" message
+
+        // clear input for next question
+        answerInput.value = '';
+    }, 1500);
 }
 
 // Event Listeners

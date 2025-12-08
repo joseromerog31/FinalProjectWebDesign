@@ -44,12 +44,24 @@ var answerInput = document.querySelector('#answer');
 var btnCheck = document.getElementById('btnCheck');
 var infoMessageEl = document.querySelector('.info-message');
 var totalQuestionsElement = document.getElementById('totalQuestions');
+var feedbackContainer = document.querySelector('#feedback');
+var feedbackImage = document.querySelector('#feedbackImage');
+var feedbackText = document.querySelector('#feedbackText');
 // Game State
 var correctAnswer = '';
 var incorrectAnswers = [];
 var questionCount = 1;
 var correctCount = 0;
 var incorrectCount = 0;
+function getCategoryIdFromUrl() {
+    var params = new URLSearchParams(window.location.search);
+    var value = params.get('trivia_category');
+    if (!value || value === 'any') {
+        return null; // no category filter
+    }
+    return value;
+}
+var selectedCategoryId = getCategoryIdFromUrl();
 // API Logic
 function loadQuestion() {
     return __awaiter(this, void 0, void 0, function () {
@@ -58,6 +70,9 @@ function loadQuestion() {
             switch (_a.label) {
                 case 0:
                     APIUrl = 'https://opentdb.com/api.php?amount=1&type=multiple';
+                    if (selectedCategoryId) {
+                        APIUrl += "&category=".concat(selectedCategoryId);
+                    }
                     return [4 /*yield*/, fetch(APIUrl)];
                 case 1:
                     response = _a.sent();
@@ -67,6 +82,11 @@ function loadQuestion() {
                     return [4 /*yield*/, response.json()];
                 case 2:
                     data = _a.sent();
+                    if (data.results.length === 0) {
+                        console.error('No questions returned for this category id:', selectedCategoryId);
+                        // Here you could show a message in the DOM if you want
+                        return [2 /*return*/];
+                    }
                     firstQuestion = data.results[0];
                     showQuestion(firstQuestion);
                     return [2 /*return*/];
@@ -118,6 +138,21 @@ function setDifficulty(quizDifficulty) {
     }
     difficultyEl.textContent = quizDifficulty;
 }
+// Feedback
+function showFeedback(isCorrect) {
+    if (!feedbackContainer || !feedbackImage || !feedbackText)
+        return;
+    feedbackContainer.classList.remove('hidden');
+    if (isCorrect) {
+        feedbackImage.src = '../assets/correct.jpg';
+        feedbackText.textContent = 'Correct! 🎉';
+    }
+    else {
+        feedbackImage.src = '../assets/incorrect.jpg';
+        feedbackImage.alt = 'Incorrect answer';
+        feedbackText.textContent = "Incorrect! The correct answer was: ".concat(correctAnswer);
+    }
+}
 // Answer Check
 function checkAnswers() {
     if (!answerInput)
@@ -136,16 +171,19 @@ function checkAnswers() {
     // Normalize both answers to ignore case and extra whitespace
     var userAnswer = userAnswerRaw.toLowerCase();
     var correctNormalized = correctAnswer.trim().toLowerCase();
-    if (userAnswer === correctNormalized) {
+    var isCorrect = userAnswer === correctNormalized;
+    if (isCorrect) {
         correctCount++;
-        console.log('Correct!');
     }
     else {
         incorrectCount++;
-        console.log("Incorrect. Correct answer: ".concat(correctAnswer));
     }
-    // Prepare for next question
+    showFeedback(isCorrect);
     setTimeout(function () {
+        // hide feedback
+        if (feedbackContainer) {
+            feedbackContainer.classList.add('hidden');
+        }
         if (questionCount === 10) {
             var queryString = "?correctCount=".concat(correctCount, "&incorrectCount=").concat(incorrectCount);
             window.location.href = "results.html".concat(queryString);
@@ -157,7 +195,9 @@ function checkAnswers() {
         if (totalQuestionsElement) {
             totalQuestionsElement.textContent = String(questionCount);
         }
-    }, 800); // small delay so we can later show a "Correct/Incorrect" message
+        // clear input for next question
+        answerInput.value = '';
+    }, 1500);
 }
 // Event Listeners
 if (btnCheck) {
