@@ -37,18 +37,6 @@ let questionCount = 1;
 let correctCount = 0;
 let incorrectCount = 0;
 
-// Timer
-let timerInterval: number | null = null;
-let timeLeft: number = 15;
-const SECONDS_PER_QUESTION = 15;
-let timerEl: HTMLElement | null = null;
-
-document.addEventListener('DOMContentLoaded', () => {
-    timerEl = document.querySelector<HTMLElement>('#timer');
-    void loadQuestion();
-});
-
-
 function getCategoryIdFromUrl(): string | null {
     const params = new URLSearchParams(window.location.search);
     const value = params.get('trivia_category');
@@ -61,61 +49,6 @@ function getCategoryIdFromUrl(): string | null {
 }
 
 const selectedCategoryId: string | null = getCategoryIdFromUrl();
-
-function startTimer(): void {
-    stopTimer();
-    timeLeft = SECONDS_PER_QUESTION;
-    console.log('timerEl is', timerEl);
-    if (timerEl) {
-        timerEl.textContent = `Time left: ${timeLeft}s`;
-    }
-
-    timerInterval = window.setInterval(() => {
-        timeLeft--;
-
-        if (timerEl) {
-            timerEl.textContent = `Time left: ${timeLeft}s`;
-        }
-
-        if (timeLeft <= 0) {
-            stopTimer();
-            handleTimeOut();
-        }
-    }, 1000);
-}
-
-
-function stopTimer(): void {
-    if (timerInterval !== null) {
-        clearInterval(timerInterval);
-        timerInterval = null;
-    }
-}
-
-function handleTimeOut(): void {
-    incorrectCount++;
-
-    // Show feedback as incorrect
-    showFeedback(false);
-
-    setTimeout(() => {
-        if (feedbackContainer) {
-            feedbackContainer.classList.add('hidden');
-        }
-
-        if (questionCount === 10) {
-            const queryString = `?correctCount=${correctCount}&incorrectCount=${incorrectCount}`;
-            window.location.href = `results.html${queryString}`;
-        } else {
-            questionCount++;
-            void loadQuestion();
-        }
-
-        if (totalQuestionsElement) {
-            totalQuestionsElement.textContent = String(questionCount);
-        }
-    }, 1500);
-}
 
 
 // API Logic
@@ -177,7 +110,6 @@ function showQuestion(data: TriviaQuestionRaw): void {
             optionsEl.appendChild(li);
         }
     }
-    startTimer();
 }
 
 function setDifficulty(quizDifficulty: TriviaQuestionRaw['difficulty']): void {
@@ -228,8 +160,6 @@ function checkAnswers(): void {
         }
         return;
     }
-
-    stopTimer();
 
     // Normalize both answers to ignore case and extra whitespace
     const userAnswer = userAnswerRaw.toLowerCase();
@@ -282,3 +212,5 @@ if (answerInput) {
         }
     });
 }
+
+void loadQuestion();
