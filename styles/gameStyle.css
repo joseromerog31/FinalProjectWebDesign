@@ -55,3 +55,16 @@ button:hover {
 .hidden {
     display: none;
 }
+
+.timer-container {
+    margin: 10px 0;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+}
+
+#timer {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background-color: #f0f0f0;
+}
