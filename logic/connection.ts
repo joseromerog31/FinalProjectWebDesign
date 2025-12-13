@@ -37,65 +37,17 @@ let questionCount = 1;
 let correctCount = 0;
 let incorrectCount = 0;
 
-let timerId: number | null = null;
-let timeLeft = 15;
-const timerEl = document.getElementById('timer');
+// Timer
+let timerInterval: number | null = null;
+let timeLeft: number = 15;
+const SECONDS_PER_QUESTION = 15;
+let timerEl: HTMLElement | null = null;
 
-function startCountdown(seconds: number): void {
-    stopCountdown(); // prevent duplicates
-    timeLeft = seconds;
+document.addEventListener('DOMContentLoaded', () => {
+    timerEl = document.querySelector<HTMLElement>('#timer');
+    void loadQuestion();
+});
 
-    if (timerEl) {
-        timerEl.textContent = `Time left: ${timeLeft}s`;
-    }
-
-    timerId = window.setInterval(() => {
-        timeLeft--;
-
-        if (timerEl) {
-            timerEl.textContent = `Time left: ${timeLeft}s`;
-        }
-
-        if (timeLeft <= 0) {
-            stopCountdown();
-            onTimeExpired();
-        }
-    }, 1000);
-
-    console.log(timerEl);
-
-}
-
-function stopCountdown(): void {
-    if (timerId !== null) {
-        clearInterval(timerId);
-        timerId = null;
-    }
-}
-
-function onTimeExpired(): void {
-    console.log('Time expired!');
-    // treat as incorrect answer
-    incorrectCount++;
-    showFeedback(false);
-
-    setTimeout(() => {
-        nextQuestion();
-    }, 1200);
-}
-
-function nextQuestion(): void {
-    if (questionCount === 10) {
-        const queryString = `?correctCount=${correctCount}&incorrectCount=${incorrectCount}`;
-        window.location.href = `results.html${queryString}`;
-    } else {
-        questionCount++;
-        if (totalQuestionsElement) {
-            totalQuestionsElement.textContent = String(questionCount);
-        }
-        void loadQuestion();
-    }
-}
 
 function getCategoryIdFromUrl(): string | null {
     const params = new URLSearchParams(window.location.search);
@@ -110,7 +62,35 @@ function getCategoryIdFromUrl(): string | null {
 
 const selectedCategoryId: string | null = getCategoryIdFromUrl();
 
+function startTimer(): void {
+    stopTimer();
+    timeLeft = SECONDS_PER_QUESTION;
+    console.log('timerEl is', timerEl);
+    if (timerEl) {
+        timerEl.textContent = `Time left: ${timeLeft}s`;
+    }
 
+    timerInterval = window.setInterval(() => {
+        timeLeft--;
+
+        if (timerEl) {
+            timerEl.textContent = `Time left: ${timeLeft}s`;
+        }
+
+        if (timeLeft <= 0) {
+            stopTimer();
+            handleTimeOut();
+        }
+    }, 1000);
+}
+
+
+function stopTimer(): void {
+    if (timerInterval !== null) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+    }
+}
 
 function handleTimeOut(): void {
     incorrectCount++;
@@ -197,7 +177,7 @@ function showQuestion(data: TriviaQuestionRaw): void {
             optionsEl.appendChild(li);
         }
     }
-    startCountdown(15);
+    startTimer();
 }
 
 function setDifficulty(quizDifficulty: TriviaQuestionRaw['difficulty']): void {
@@ -249,7 +229,7 @@ function checkAnswers(): void {
         return;
     }
 
-    stopCountdown();
+    stopTimer();
 
     // Normalize both answers to ignore case and extra whitespace
     const userAnswer = userAnswerRaw.toLowerCase();
@@ -265,7 +245,6 @@ function checkAnswers(): void {
     showFeedback(isCorrect);
 
     setTimeout(() => {
-        nextQuestion();
         // hide feedback
         if (feedbackContainer) {
             feedbackContainer.classList.add('hidden');
@@ -285,7 +264,7 @@ function checkAnswers(): void {
 
         // clear input for next question
         answerInput.value = '';
-    }, 1200);
+    }, 1500);
 }
 
 // Event Listeners
