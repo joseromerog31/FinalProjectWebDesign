@@ -39,7 +39,8 @@ let incorrectCount = 0;
 
 // Timer
 let timerInterval: number | null = null;
-let timeLeft: number = 15; // seconds per question
+let timeLeft: number
+const SECONDS_PER_QUESTION = 15;
 const timerEl = document.querySelector<HTMLElement>('#timer');
 
 function getCategoryIdFromUrl(): string | null {
@@ -56,8 +57,8 @@ function getCategoryIdFromUrl(): string | null {
 const selectedCategoryId: string | null = getCategoryIdFromUrl();
 
 function startTimer(): void {
-    stopTimer(); // make sure no old timer is running
-    timeLeft = 10;
+    stopTimer();
+    timeLeft = SECONDS_PER_QUESTION;
 
     if (timerEl) {
         timerEl.textContent = `Time left: ${timeLeft}s`;
@@ -76,6 +77,7 @@ function startTimer(): void {
         }
     }, 1000);
 }
+
 
 function stopTimer(): void {
     if (timerInterval !== null) {
@@ -206,7 +208,6 @@ function showFeedback(isCorrect: boolean): void {
 
 // Answer Check
 function checkAnswers(): void {
-    stopTimer();
     if (!answerInput) return;
 
     const userAnswerRaw = answerInput.value.trim();
@@ -221,6 +222,8 @@ function checkAnswers(): void {
         }
         return;
     }
+
+    stopTimer();
 
     // Normalize both answers to ignore case and extra whitespace
     const userAnswer = userAnswerRaw.toLowerCase();
