@@ -39,7 +39,7 @@ let incorrectCount = 0;
 
 // Timer
 let timerInterval: number | null = null;
-let timeLeft: number
+let timeLeft: number = 15;
 const SECONDS_PER_QUESTION = 15;
 let timerEl: HTMLElement | null = null;
 
