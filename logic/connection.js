@@ -53,6 +53,55 @@ var incorrectAnswers = [];
 var questionCount = 1;
 var correctCount = 0;
 var incorrectCount = 0;
+var timerId = null;
+var timeLeft = 15;
+var timerEl = document.getElementById('timer');
+function startCountdown(seconds) {
+    stopCountdown(); // prevent duplicates
+    timeLeft = seconds;
+    if (timerEl) {
+        timerEl.textContent = "Time left: ".concat(timeLeft, "s");
+    }
+    timerId = window.setInterval(function () {
+        timeLeft--;
+        if (timerEl) {
+            timerEl.textContent = "Time left: ".concat(timeLeft, "s");
+        }
+        if (timeLeft <= 0) {
+            stopCountdown();
+            onTimeExpired();
+        }
+    }, 1000);
+    console.log(timerEl);
+}
+function stopCountdown() {
+    if (timerId !== null) {
+        clearInterval(timerId);
+        timerId = null;
+    }
+}
+function onTimeExpired() {
+    console.log('Time expired!');
+    // treat as incorrect answer
+    incorrectCount++;
+    showFeedback(false);
+    setTimeout(function () {
+        nextQuestion();
+    }, 1200);
+}
+function nextQuestion() {
+    if (questionCount === 10) {
+        var queryString = "?correctCount=".concat(correctCount, "&incorrectCount=").concat(incorrectCount);
+        window.location.href = "results.html".concat(queryString);
+    }
+    else {
+        questionCount++;
+        if (totalQuestionsElement) {
+            totalQuestionsElement.textContent = String(questionCount);
+        }
+        void loadQuestion();
+    }
+}
 function getCategoryIdFromUrl() {
     var params = new URLSearchParams(window.location.search);
     var value = params.get('trivia_category');
@@ -62,6 +111,27 @@ function getCategoryIdFromUrl() {
     return value;
 }
 var selectedCategoryId = getCategoryIdFromUrl();
+function handleTimeOut() {
+    incorrectCount++;
+    // Show feedback as incorrect
+    showFeedback(false);
+    setTimeout(function () {
+        if (feedbackContainer) {
+            feedbackContainer.classList.add('hidden');
+        }
+        if (questionCount === 10) {
+            var queryString = "?correctCount=".concat(correctCount, "&incorrectCount=").concat(incorrectCount);
+            window.location.href = "results.html".concat(queryString);
+        }
+        else {
+            questionCount++;
+            void loadQuestion();
+        }
+        if (totalQuestionsElement) {
+            totalQuestionsElement.textContent = String(questionCount);
+        }
+    }, 1500);
+}
 // API Logic
 function loadQuestion() {
     return __awaiter(this, void 0, void 0, function () {
@@ -122,6 +192,7 @@ function showQuestion(data) {
             optionsEl.appendChild(li);
         }
     }
+    startCountdown(15);
 }
 function setDifficulty(quizDifficulty) {
     if (!difficultyEl)
@@ -168,6 +239,7 @@ function checkAnswers() {
         }
         return;
     }
+    stopCountdown();
     // Normalize both answers to ignore case and extra whitespace
     var userAnswer = userAnswerRaw.toLowerCase();
     var correctNormalized = correctAnswer.trim().toLowerCase();
@@ -180,6 +252,7 @@ function checkAnswers() {
     }
     showFeedback(isCorrect);
     setTimeout(function () {
+        nextQuestion();
         // hide feedback
         if (feedbackContainer) {
             feedbackContainer.classList.add('hidden');
@@ -197,7 +270,7 @@ function checkAnswers() {
         }
         // clear input for next question
         answerInput.value = '';
-    }, 1500);
+    }, 1200);
 }
 // Event Listeners
 if (btnCheck) {
@@ -212,4 +285,3 @@ if (answerInput) {
         }
     });
 }
-void loadQuestion();
