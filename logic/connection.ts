@@ -41,7 +41,13 @@ let incorrectCount = 0;
 let timerInterval: number | null = null;
 let timeLeft: number
 const SECONDS_PER_QUESTION = 15;
-const timerEl = document.querySelector<HTMLElement>('#timer');
+let timerEl: HTMLElement | null = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    timerEl = document.querySelector<HTMLElement>('#timer');
+    void loadQuestion();
+});
+
 
 function getCategoryIdFromUrl(): string | null {
     const params = new URLSearchParams(window.location.search);
@@ -59,7 +65,7 @@ const selectedCategoryId: string | null = getCategoryIdFromUrl();
 function startTimer(): void {
     stopTimer();
     timeLeft = SECONDS_PER_QUESTION;
-
+    console.log('timerEl is', timerEl);
     if (timerEl) {
         timerEl.textContent = `Time left: ${timeLeft}s`;
     }
@@ -276,5 +282,3 @@ if (answerInput) {
         }
     });
 }
-
-void loadQuestion();
