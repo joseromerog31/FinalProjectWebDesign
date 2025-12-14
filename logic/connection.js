@@ -1,4 +1,3 @@
-"use strict";
 // DOM elements
 // Question
 const questionEl = document.querySelector('#question'); // DOM Question

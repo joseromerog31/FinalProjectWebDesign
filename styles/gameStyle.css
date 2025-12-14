@@ -2,8 +2,6 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     background: linear-gradient(to bottom,
-    #DCCEFF 0%,
-    #DCCEFF 40%,
     #E9F1FF 40%,
     #E9F1FF 100%
     );
