@@ -1,40 +1,49 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
     margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom,
+    #1F77FF 0%,
+    #1F77FF 40%,
+    #C7F8D4 40%,
+    #C7F8D4 100%
+    );
+    height: 100vh;
+    overflow-x: hidden;
 }
 
 .mainContent {
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-        margin-top: 30px;
+    margin-top: 80px;
 }
 
-.container {
-    background: white;
-    padding: 20px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    width: 500px;
+.welcome-box {
+    width: 450px;
+    background-color: #E5FFEF;
+    padding: 35px;
+    border-radius: 14px;
     text-align: center;
-    display: grid;
-    place-items: center;
+    box-shadow: 0 0 16px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 2;
 }
 
+.welcome-box h2 {
+    color: #1F77FF;
+    font-size: 28px;
+    margin-top: 0;
+}
+
+.welcome-box p {
+    font-size: 18px;
+    color: #333;
+}
 
 .startButton {
-    background-color: #007bff;
-    padding: 12px 25px;
-    border-radius: 8px;
+    background-color: #FF8C42;
+    padding: 12px 28px;
+    border-radius: 10px;
     color: white;
     font-size: 18px;
     text-decoration: none;
-    cursor: pointer;
-    display: inline-block;
-}
-
-.startButton:hover {
-    background-color: #0056b3;
 }

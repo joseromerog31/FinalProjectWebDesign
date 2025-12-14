@@ -1,70 +1,86 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
     margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom,
+    #DCCEFF 0%,
+    #DCCEFF 40%,
+    #E9F1FF 40%,
+    #E9F1FF 100%
+    );
+    height: 100vh;
+    overflow-x: hidden;
 }
 
 .mainContent {
     display: flex;
-    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    margin-top: 30px;
+    margin-top: 50px;
 }
 
-.container {
-    background: white;
-    padding: 20px 30px;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    width: 500px;
+.question-box {
+    width: 620px;
+    background-color: #F5EDFF;
+    padding: 35px;
+    border-radius: 14px;
     text-align: center;
-    display: grid;
-    place-items: center;
+    box-shadow: 0 0 16px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 2;
+}
+
+#quizCategory {
+    font-size: 22px;
+    font-weight: bold;
+    color: #1F77FF;
+}
+
+#quizDifficulty {
+    font-size: 20px;
+    font-weight: bold;
+    color: #2FA86E;
+}
+
+.questionNumber {
+    font-size: 20px;
+    font-weight: bold;
+    color: #E68A00;
 }
 
 #question {
-    font-size: 18px;
-    margin-bottom: 15px;
+    font-size: 24px;
     font-weight: bold;
+    color: black;
+    margin-top: 20px;
 }
 
-input[type="text"] {
-    width: 92%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 15px;
+.quiz-options li {
+    text-align: left;
+    margin-left: 22%;
+    font-size: 20px;
+    color: black;
 }
 
-button {
-    padding: 10px 15px;
-    font-size: 16px;
-    background-color: #007bff;
+#answer {
+    width: 85%;
+    padding: 12px;
+    font-size: 20px;
+    border-radius: 10px;
+    border: 2px solid #1F77FF;
+    margin-top: 20px;
+}
+
+#btnCheck {
+    margin-top: 20px;
+    background-color: #FF8C42;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 20px;
     color: white;
     border: none;
-    border-radius: 8px;
-    cursor: pointer;
 }
 
-button:hover {
-    background-color: #0056b3;
-}
-
-.hidden {
-    display: none;
-}
-
-.timer-container {
-    margin: 10px 0;
-    font-size: 18px;
-    font-weight: bold;
-    text-align: center;
-}
-
-#timer {
-    padding: 6px 12px;
-    border-radius: 8px;
-    background-color: #f0f0f0;
+.feedback-image {
+    width: 80px;
+    height: auto;
+    margin-top: 15px;
 }

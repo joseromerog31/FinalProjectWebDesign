@@ -37,6 +37,12 @@ let questionCount = 1;
 let correctCount = 0;
 let incorrectCount = 0;
 
+const timerEl = document.querySelector<HTMLElement>('#timer');
+
+let timeLeft = 15;
+let timerId: number | null = null;
+
+
 function getCategoryIdFromUrl(): string | null {
     const params = new URLSearchParams(window.location.search);
     const value = params.get('trivia_category');
@@ -50,6 +56,69 @@ function getCategoryIdFromUrl(): string | null {
 
 const selectedCategoryId: string | null = getCategoryIdFromUrl();
 
+function stopTimer(): void {
+    if (timerId !== null) {
+        window.clearInterval(timerId);
+        timerId = null;
+    }
+}
+
+function renderTimer(): void {
+    if (timerEl) timerEl.textContent = String(timeLeft);
+}
+
+function startTimer(): void {
+    stopTimer();
+    timeLeft = 15;
+    renderTimer();
+
+    timerId = window.setInterval(() => {
+        timeLeft--;
+        renderTimer();
+
+        if (timeLeft <= 0) {
+            stopTimer();
+            handleTimeUp();
+        }
+    }, 1000);
+}
+
+function handleTimeUp(): void {
+    // If you want: prevent the user from submitting while we show feedback
+    if (btnCheck) btnCheck.disabled = true;
+    if (answerInput) answerInput.disabled = true;
+
+    // Count as incorrect
+    incorrectCount++;
+
+    // Reuse your feedback UI
+    showFeedback(false); // will show "Incorrect! The correct answer was: ..."
+
+    setTimeout(() => {
+        if (feedbackContainer) feedbackContainer.classList.add('hidden');
+
+        if (questionCount === 10) {
+            const queryString = `?correctCount=${correctCount}&incorrectCount=${incorrectCount}`;
+            window.location.href = `results.html${queryString}`;
+            return;
+        }
+
+        questionCount++;
+        if (totalQuestionsElement) totalQuestionsElement.textContent = String(questionCount);
+
+        // Re-enable for next question
+        if (btnCheck) btnCheck.disabled = false;
+        if (answerInput) {
+            answerInput.disabled = false;
+            answerInput.value = '';
+        }
+
+        if (btnCheck) btnCheck.disabled = false;
+        if (answerInput) answerInput.disabled = false;
+
+        void loadQuestion();
+    }, 1500);
+}
 
 // API Logic
 async function loadQuestion (): Promise<void> {
@@ -110,6 +179,7 @@ function showQuestion(data: TriviaQuestionRaw): void {
             optionsEl.appendChild(li);
         }
     }
+    startTimer();
 }
 
 function setDifficulty(quizDifficulty: TriviaQuestionRaw['difficulty']): void {
@@ -147,6 +217,8 @@ function showFeedback(isCorrect: boolean): void {
 // Answer Check
 function checkAnswers(): void {
     if (!answerInput) return;
+
+    stopTimer();
 
     const userAnswerRaw = answerInput.value.trim();
 

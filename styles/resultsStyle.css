@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom,
+    #FF8C42 0%,
+    #FF8C42 40%,
+    #FFF4C8 40%,
+    #FFF4C8 100%
+    );
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+.results-box {
+    width: 550px;
+    background-color: #FFEEC0;
+    padding: 40px;
+    border-radius: 14px;
+    margin: 70px auto;
+    text-align: center;
+    box-shadow: 0 0 16px rgba(0,0,0,0.25);
+    position: relative;
+    z-index: 2;
+}
+
+.results-box h2 {
+    font-size: 30px;
+    color: #FF8C42;
+}
+
+.main-score {
+    font-size: 26px;
+    font-weight: bold;
+    color: black;
+}
+
+.points-text {
+    font-size: 24px;
+    color: #2FA86E;
+}
+
+.play-again {
+    margin-top: 25px;
+    padding: 12px 28px;
+    border-radius: 10px;
+    background-color: #FF8C42;
+    color: white;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.play-again:hover {
+    background-color: #E67620;
+}

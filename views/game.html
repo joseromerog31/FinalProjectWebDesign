@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Trivia Challenge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trivia Challenge | Game</title>
     <link rel="stylesheet" href="../styles/gameStyle.css">
     <link rel="stylesheet" href="../styles/headerStyle.css">
 
@@ -13,28 +14,31 @@
 </div>
 
 <div class="mainContent">
-    <div class="container">
+    <div class="container question-box">
 
         <!-- Top info: category, difficulty, question number -->
         <div class="quiz-header">
             <p id="quizCategory">Category</p>
             <p>
                 Difficulty:
-                <span id="quizDifficulty">-</span>
+                <span id="quizDifficulty" class="difficultyLabel">-</span>
             </p>
-            <p>
+            <p class="questionNumber">
                 Question
                 <span id="totalQuestions">1</span>
                 / 10
             </p>
+            <p>
+                Time:
+                <span id="timer">15</span>s
+            </p>
         </div>
 
         <!-- Question text -->
-        <div id="question">Loading question...</div>
+        <div id="question" class="question-text">Loading question...</div>
 
-        <!-- Show multiple-choice options as hints (not clickable) -->
-        <ul class="quiz-options">
-            <!-- TS will fill this with <li> options -->
+        <!-- Show multiple-choice options -->
+        <ul class="quiz-options" id="choices">
         </ul>
 
         <!-- User answer input -->
@@ -48,7 +52,7 @@
 
         <!-- Feedback area -->
         <div id="feedback" class="feedback hidden">
-            <img id="feedbackImage" src="../assets/image.jpg" alt="Feedback">
+            <img id="feedbackImage" class="feedback-image" src="" alt="Feedback">
             <p id="feedbackText"></p>
         </div>
 

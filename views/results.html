@@ -3,24 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trivia Challenge</title>
-    <link rel="stylesheet" href="../styles/indexStyle.css">
+    <title>Trivia Challenge | Results</title>
+    <link rel="stylesheet" href="../styles/resultsStyle.css">
     <link rel="stylesheet" href="../styles/headerStyle.css">
 </head>
 
 <body>
-<div class="header">
+
+<div class="header header-results">
     <h1>Trivia Challenge</h1>
 </div>
 
+<div class="results-box">
+    <h2>Results</h2>
 
-<header> Results </header>
+    <p id="scoreText" class="main-score"></p>
+    <p id="scorePoints" class="points-text"></p>
 
-<div class="mainContent">
-    <p id="scoreText"></p>
-    <p id="scorePoints"></p>
+    <a class="play-again" href="../index.html">Play Again</a>
 </div>
 
 <script type="module" src="../logic/results.js"></script>
+
 </body>
 </html>

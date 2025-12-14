@@ -6,7 +6,9 @@
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
-    "outDir": "logic"
+    "outDir": "logic",
+    "rootDir": "src"
   },
-  "include": ["logic/**/*"]
+  "include": ["src/**/*.ts"],
+  "exclude": ["node_modules"]
 }
