@@ -18,7 +18,7 @@ let questionCount = 1;
 let correctCount = 0;
 let incorrectCount = 0;
 const timerEl = document.querySelector('#timer');
-let timeLeft = 15;
+let timeLeft = 30;
 let timerId = null;
 function getCategoryIdFromUrl() {
     const params = new URLSearchParams(window.location.search);
@@ -41,7 +41,7 @@ function renderTimer() {
 }
 function startTimer() {
     stopTimer();
-    timeLeft = 15;
+    timeLeft = 30;
     renderTimer();
     timerId = window.setInterval(() => {
         timeLeft--;

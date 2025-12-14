@@ -39,7 +39,7 @@ let incorrectCount = 0;
 
 const timerEl = document.querySelector<HTMLElement>('#timer');
 
-let timeLeft = 15;
+let timeLeft = 30;
 let timerId: number | null = null;
 
 
@@ -69,7 +69,7 @@ function renderTimer(): void {
 
 function startTimer(): void {
     stopTimer();
-    timeLeft = 15;
+    timeLeft = 30;
     renderTimer();
 
     timerId = window.setInterval(() => {
