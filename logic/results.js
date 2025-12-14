@@ -1,29 +1,37 @@
-"use strict";
 // Helper
 function getNumberParam(params, key) {
-    const value = params.get(key);
-    const parsed = value !== null ? parseInt(value, 10) : NaN;
+    var value = params.get(key);
+    var parsed = value !== null ? parseInt(value, 10) : NaN;
     return Number.isNaN(parsed) ? 0 : parsed;
 }
 function initResults() {
-    // Read query params: ?correctCount &incorrectCount
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const correctCount = getNumberParam(urlParams, 'correctCount');
-    const incorrectCount = getNumberParam(urlParams, 'incorrectCount');
+    // Read query params
+    var queryString = window.location.search;
+    var urlParams = new URLSearchParams(queryString);
+    var resultMessageElement = document.querySelector('#resultMessage');
+    var correctCount = getNumberParam(urlParams, 'correctCount');
+    var incorrectCount = getNumberParam(urlParams, 'incorrectCount');
     // DOM elements
-    const scoreTextElement = document.querySelector('#scoreText');
-    const scorePointsElement = document.querySelector('#scorePoints');
+    var scoreTextElement = document.querySelector('#scoreText');
+    var scorePointsElement = document.querySelector('#scorePoints');
     if (!scoreTextElement || !scorePointsElement) {
         console.error('Missing #scoreText or #scorePoints in the results HTML.');
         return;
     }
-    // Show: Score
-    scoreTextElement.textContent = `Your score is: ${correctCount} of 10`;
+    // Show score
+    scoreTextElement.textContent = "Your score is: ".concat(correctCount, " of 10");
     // Total points (10 per correct answer)
-    const totalPoints = correctCount * 10;
+    var totalPoints = correctCount * 10;
     // Set points text and prepend trophy
-    scorePointsElement.innerHTML = `${totalPoints} points`;
+    scorePointsElement.innerHTML = "".concat(totalPoints, " points");
+    if (resultMessageElement) {
+        if (correctCount > 5) {
+            resultMessageElement.textContent = "You're a genius 🧠";
+        }
+        else {
+            resultMessageElement.textContent = "Better luck next time 🍀";
+        }
+    }
 }
 // Run when the page is ready
 document.addEventListener('DOMContentLoaded', initResults);

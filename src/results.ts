@@ -6,9 +6,11 @@ function getNumberParam(params: URLSearchParams, key: string): number {
 }
 
 function initResults(): void {
-    // Read query params: ?correctCount &incorrectCount
+    // Read query params
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
+    const resultMessageElement = document.querySelector<HTMLElement>('#resultMessage');
+
 
     const correctCount: number = getNumberParam(urlParams, 'correctCount');
     const incorrectCount: number = getNumberParam(urlParams, 'incorrectCount');
@@ -22,7 +24,7 @@ function initResults(): void {
         return;
     }
 
-    // Show: Score
+    // Show score
     scoreTextElement.textContent = `Your score is: ${correctCount} of 10`;
 
     // Total points (10 per correct answer)
@@ -30,6 +32,15 @@ function initResults(): void {
 
     // Set points text and prepend trophy
     scorePointsElement.innerHTML = `${totalPoints} points`;
+
+    if (resultMessageElement) {
+        if (correctCount > 5) {
+            resultMessageElement.textContent = "You're a genius 🧠";
+        } else {
+            resultMessageElement.textContent = "Better luck next time 🍀";
+        }
+    }
+
 }
 
 // Run when the page is ready
