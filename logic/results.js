@@ -22,7 +22,7 @@ function initResults() {
     scoreTextElement.textContent = "Your score is: ".concat(correctCount, " of 10");
     // Total points (10 per correct answer)
     var totalPoints = correctCount * 10;
-    // Set points text and prepend trophy
+    // Set points
     scorePointsElement.innerHTML = "".concat(totalPoints, " points");
     if (resultMessageElement) {
         if (correctCount > 5) {

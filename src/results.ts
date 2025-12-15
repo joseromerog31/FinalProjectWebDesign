@@ -30,7 +30,7 @@ function initResults(): void {
     // Total points (10 per correct answer)
     const totalPoints: number = correctCount * 10;
 
-    // Set points text and prepend trophy
+    // Set points
     scorePointsElement.innerHTML = `${totalPoints} points`;
 
     if (resultMessageElement) {

@@ -216,7 +216,7 @@ function checkAnswers() {
 if (btnCheck) {
     btnCheck.addEventListener('click', checkAnswers);
 }
-// Optional: allow pressing Enter to submit the answer
+
 if (answerInput) {
     answerInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {

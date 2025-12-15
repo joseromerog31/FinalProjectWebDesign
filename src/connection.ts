@@ -84,15 +84,13 @@ function startTimer(): void {
 }
 
 function handleTimeUp(): void {
-    // If you want: prevent the user from submitting while we show feedback
     if (btnCheck) btnCheck.disabled = true;
     if (answerInput) answerInput.disabled = true;
 
     // Count as incorrect
     incorrectCount++;
 
-    // Reuse your feedback UI
-    showFeedback(false); // will show "Incorrect! The correct answer was: ..."
+    showFeedback(false);
 
     setTimeout(() => {
         if (feedbackContainer) feedbackContainer.classList.add('hidden');
@@ -275,7 +273,6 @@ if (btnCheck) {
     btnCheck.addEventListener('click', checkAnswers);
 }
 
-// Optional: allow pressing Enter to submit the answer
 if (answerInput) {
     answerInput.addEventListener('keydown', (event: KeyboardEvent) => {
         if (event.key === 'Enter') {
